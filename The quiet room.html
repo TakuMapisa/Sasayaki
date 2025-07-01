@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Quiet Room</title>
+    <title>Poetry Reading Room</title>
     <style>
         body {
             margin: 0;
@@ -19,121 +19,219 @@
             width: 100%;
             height: 100vh;
             background: 
-                radial-gradient(circle at 20% 30%, rgba(255,215,130,0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(255,180,100,0.08) 0%, transparent 40%);
+                radial-gradient(circle at 30% 20%, rgba(255,215,130,0.15) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(255,180,100,0.1) 0%, transparent 40%);
         }
 
-        .desk-lamp {
+        /* Stage and Podium */
+        .stage {
             position: absolute;
-            top: 15%;
-            right: 25%;
-            width: 150px;
-            height: 200px;
-            background: linear-gradient(45deg, #8b4513, #a0522d);
-            border-radius: 10px 10px 50px 50px;
-            opacity: 0.6;
+            bottom: 0;
+            left: 30%;
+            width: 40%;
+            height: 25%;
+            background: linear-gradient(180deg, #654321, #4a2c17);
+            border-radius: 20px 20px 0 0;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.3);
         }
 
-        .lamp-light {
+        .podium {
+            position: absolute;
+            bottom: 15%;
+            left: 47%;
+            width: 6%;
+            height: 12%;
+            background: linear-gradient(180deg, #8b4513, #654321);
+            border-radius: 5px 5px 0 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+        }
+
+        /* Poet at podium */
+        .poet {
+            position: absolute;
+            bottom: 27%;
+            left: 48%;
+            width: 4%;
+            height: 8%;
+            background: linear-gradient(180deg, #2d2d2d, #1a1a1a);
+            border-radius: 50% 50% 20% 20%;
+            animation: poetGesture 8s ease-in-out infinite;
+        }
+
+        .poet::before {
+            content: '';
+            position: absolute;
+            top: -10%;
+            left: 10%;
+            width: 80%;
+            height: 30%;
+            background: #3d3d3d;
+            border-radius: 50%;
+        }
+
+        @keyframes poetGesture {
+            0%, 100% { transform: rotate(-2deg); }
+            25% { transform: rotate(1deg); }
+            50% { transform: rotate(-1deg); }
+            75% { transform: rotate(2deg); }
+        }
+
+        /* Speaking animation for poet */
+        .poet.speaking {
+            animation: poetSpeaking 2s ease-in-out infinite;
+        }
+
+        @keyframes poetSpeaking {
+            0%, 100% { transform: rotate(-2deg) scale(1); }
+            25% { transform: rotate(1deg) scale(1.02); }
+            50% { transform: rotate(-1deg) scale(1.01); }
+            75% { transform: rotate(2deg) scale(1.02); }
+        }
+
+        /* Audience members */
+        .audience-row {
+            position: absolute;
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+        }
+
+        .audience-row-1 {
+            bottom: 5%;
+            left: 10%;
+            width: 20%;
+            height: 15%;
+        }
+
+        .audience-row-2 {
+            bottom: 8%;
+            left: 5%;
+            width: 25%;
+            height: 12%;
+        }
+
+        .audience-row-3 {
+            bottom: 5%;
+            right: 10%;
+            width: 20%;
+            height: 15%;
+        }
+
+        .audience-row-4 {
+            bottom: 8%;
+            right: 5%;
+            width: 25%;
+            height: 12%;
+        }
+
+        .audience-member {
+            width: 15px;
+            height: 25px;
+            background: linear-gradient(180deg, #2d2d2d, #1a1a1a);
+            border-radius: 50% 50% 10% 10%;
+            margin: 0 2px;
+            animation: subtleMovement 6s ease-in-out infinite;
+            position: relative;
+        }
+
+        .audience-member::before {
+            content: '';
+            position: absolute;
+            top: -20%;
+            left: 20%;
+            width: 60%;
+            height: 40%;
+            background: #3d3d3d;
+            border-radius: 50%;
+        }
+
+        .audience-member:nth-child(2n) {
+            animation-delay: -2s;
+        }
+
+        .audience-member:nth-child(3n) {
+            animation-delay: -4s;
+        }
+
+        @keyframes subtleMovement {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-2px) rotate(-1deg); }
+            50% { transform: translateY(-1px) rotate(1deg); }
+            75% { transform: translateY(-3px) rotate(0deg); }
+        }
+
+        /* Spotlight */
+        .spotlight {
+            position: absolute;
+            top: 0;
+            left: 45%;
+            width: 10%;
+            height: 50%;
+            background: linear-gradient(180deg, 
+                rgba(255,220,150,0.4) 0%, 
+                rgba(255,220,150,0.2) 50%, 
+                rgba(255,220,150,0.05) 100%);
+            clip-path: polygon(40% 0%, 60% 0%, 100% 100%, 0% 100%);
+            animation: spotlightFlicker 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes spotlightFlicker {
+            0% { opacity: 0.6; }
+            100% { opacity: 0.9; }
+        }
+
+        /* Ambient lighting */
+        .ambient-light {
             position: absolute;
             top: 10%;
-            right: 20%;
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(255,220,150,0.3) 0%, rgba(255,220,150,0.1) 40%, transparent 70%);
-            border-radius: 50%;
-            animation: lampGlow 4s ease-in-out infinite alternate;
-        }
-
-        @keyframes lampGlow {
-            0% { opacity: 0.6; transform: scale(1); }
-            100% { opacity: 0.9; transform: scale(1.1); }
-        }
-
-        .poet-silhouette {
-            position: absolute;
-            bottom: 20%;
-            left: 30%;
-            width: 120px;
-            height: 150px;
-            background: linear-gradient(180deg, #1a1a1a, #2d2d2d);
-            border-radius: 50px 50px 20px 20px;
-            opacity: 0.8;
-            animation: breathe 6s ease-in-out infinite;
-        }
-
-        @keyframes breathe {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.02); }
-        }
-
-        .writing-desk {
-            position: absolute;
-            bottom: 10%;
-            left: 20%;
+            right: 15%;
             width: 200px;
-            height: 80px;
-            background: linear-gradient(90deg, #654321, #8b4513);
-            border-radius: 10px;
-            opacity: 0.7;
+            height: 200px;
+            background: radial-gradient(circle, rgba(255,200,120,0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: ambientGlow 5s ease-in-out infinite alternate;
         }
 
-        .floating-word {
-            position: absolute;
-            font-size: 18px;
-            color: rgba(255, 220, 180, 0.8);
-            font-style: italic;
-            pointer-events: none;
-            opacity: 0;
-            text-shadow: 0 0 10px rgba(255, 220, 180, 0.3);
+        @keyframes ambientGlow {
+            0% { opacity: 0.3; transform: scale(1); }
+            100% { opacity: 0.6; transform: scale(1.2); }
         }
 
-        .word-animation {
-            animation: floatUp 8s ease-out forwards;
-        }
-
-        @keyframes floatUp {
-            0% {
-                opacity: 0;
-                transform: translateY(50px) scale(0.8);
-            }
-            20% {
-                opacity: 1;
-                transform: translateY(30px) scale(1);
-            }
-            80% {
-                opacity: 0.8;
-                transform: translateY(-200px) scale(0.9);
-            }
-            100% {
-                opacity: 0;
-                transform: translateY(-300px) scale(0.7);
-            }
-        }
-
+        /* Poetry display */
         .poem-display {
             position: absolute;
-            top: 10%;
-            left: 10%;
-            right: 10%;
+            top: 15%;
+            left: 15%;
+            right: 15%;
             text-align: center;
             z-index: 100;
         }
 
         .poem-title {
-            font-size: 24px;
-            color: rgba(255, 220, 180, 0.9);
-            margin-bottom: 20px;
+            font-size: 28px;
+            color: rgba(255, 220, 180, 0.95);
+            margin-bottom: 25px;
             opacity: 0;
             animation: fadeIn 2s ease-in-out 1s forwards;
+            text-shadow: 0 0 10px rgba(255, 220, 180, 0.3);
         }
 
         .poem-line {
-            font-size: 16px;
-            color: rgba(255, 220, 180, 0.8);
-            margin: 10px 0;
+            font-size: 18px;
+            color: rgba(255, 220, 180, 0.85);
+            margin: 15px 0;
             opacity: 0;
             font-style: italic;
+            line-height: 1.6;
+            text-shadow: 0 0 5px rgba(255, 220, 180, 0.2);
+        }
+
+        /* Spoken word effect */
+        .speaking-line {
+            color: rgba(255, 240, 200, 1) !important;
+            text-shadow: 0 0 15px rgba(255, 220, 180, 0.6) !important;
+            transform: scale(1.02);
+            transition: all 0.5s ease;
         }
 
         @keyframes fadeIn {
@@ -141,15 +239,48 @@
             100% { opacity: 1; transform: translateY(0); }
         }
 
+        /* Floating reaction words */
+        .reaction-word {
+            position: absolute;
+            font-size: 12px;
+            color: rgba(255, 220, 180, 0.6);
+            font-style: italic;
+            pointer-events: none;
+            opacity: 0;
+            text-shadow: 0 0 5px rgba(255, 220, 180, 0.2);
+        }
+
+        .reaction-animation {
+            animation: reactionFloat 4s ease-out forwards;
+        }
+
+        @keyframes reactionFloat {
+            0% {
+                opacity: 0;
+                transform: translateY(0) scale(0.8);
+            }
+            30% {
+                opacity: 0.8;
+                transform: translateY(-30px) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-80px) scale(0.7);
+            }
+        }
+
+        /* Controls */
         .controls {
             position: fixed;
             bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 200;
+            display: flex;
+            gap: 10px;
         }
 
-        .play-btn {
+        .control-btn {
             background: rgba(255, 220, 180, 0.2);
             border: 2px solid rgba(255, 220, 180, 0.6);
             color: rgba(255, 220, 180, 0.9);
@@ -160,39 +291,113 @@
             transition: all 0.3s ease;
         }
 
-        .play-btn:hover {
+        .control-btn:hover {
             background: rgba(255, 220, 180, 0.3);
             transform: scale(1.05);
         }
 
-        .window {
+        .control-btn.active {
+            background: rgba(255, 220, 180, 0.4);
+            box-shadow: 0 0 15px rgba(255, 220, 180, 0.3);
+        }
+
+        /* Applause effect */
+        .applause-particle {
             position: absolute;
-            top: 10%;
-            right: 10%;
-            width: 150px;
-            height: 200px;
-            background: linear-gradient(180deg, rgba(100, 150, 200, 0.1), rgba(50, 80, 120, 0.1));
-            border: 3px solid rgba(139, 69, 19, 0.6);
-            border-radius: 10px;
-            opacity: 0.7;
+            width: 3px;
+            height: 3px;
+            background: rgba(255, 220, 180, 0.8);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: applauseParticle 2s ease-out forwards;
+        }
+
+        @keyframes applauseParticle {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100px) scale(0.5);
+            }
+        }
+
+        /* Audio status indicator */
+        .audio-status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 220, 180, 0.2);
+            border: 2px solid rgba(255, 220, 180, 0.6);
+            color: rgba(255, 220, 180, 0.9);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            z-index: 300;
+        }
+
+        .audio-ready {
+            border-color: rgba(0, 255, 0, 0.6);
+            color: rgba(0, 255, 0, 0.9);
         }
     </style>
 </head>
 <body>
     <div class="room">
-        <div class="lamp-light"></div>
-        <div class="desk-lamp"></div>
-        <div class="window"></div>
-        <div class="writing-desk"></div>
-        <div class="poet-silhouette"></div>
+        <div class="spotlight"></div>
+        <div class="ambient-light"></div>
         
+        <!-- Audio Status -->
+        <div class="audio-status" id="audioStatus">Preparing audio...</div>
+        
+        <!-- Stage and Poet -->
+        <div class="stage"></div>
+        <div class="podium"></div>
+        <div class="poet" id="poet"></div>
+        
+        <!-- Audience -->
+        <div class="audience-row audience-row-1">
+            <div class="audience-member"></div>
+            <div class="audience-member"></div>
+            <div class="audience-member"></div>
+            <div class="audience-member"></div>
+        </div>
+        
+        <div class="audience-row audience-row-2">
+            <div class="audience-member"></div>
+            <div class="audience-member"></div>
+            <div class="audience-member"></div>
+            <div class="audience-member"></div>
+            <div class="audience-member"></div>
+        </div>
+        
+        <div class="audience-row audience-row-3">
+            <div class="audience-member"></div>
+            <div class="audience-member"></div>
+            <div class="audience-member"></div>
+            <div class="audience-member"></div>
+        </div>
+        
+        <div class="audience-row audience-row-4">
+            <div class="audience-member"></div>
+            <div class="audience-member"></div>
+            <div class="audience-member"></div>
+            <div class="audience-member"></div>
+            <div class="audience-member"></div>
+        </div>
+        
+        <!-- Poetry Display -->
         <div class="poem-display">
             <div class="poem-title">Whispered Thoughts</div>
             <div class="poem-lines" id="poemLines"></div>
         </div>
         
+        <!-- Controls -->
         <div class="controls">
-            <button class="play-btn" onclick="startPoetryAnimation()">Begin Poetry</button>
+            <button class="control-btn" id="initAudioBtn">Enable Audio</button>
+            <button class="control-btn" id="playBtn" disabled>Begin Reading</button>
+            <button class="control-btn" id="applauseBtn">Applause</button>
         </div>
     </div>
 
@@ -206,105 +411,464 @@
             "a whisper..."
         ];
 
-        const floatingWords = [
-            "whisper", "love", "heart", "soul", "dreams", "silence", 
-            "gentle", "soft", "quiet", "tender", "breath", "moment",
-            "touch", "feel", "close", "warm", "peace", "light"
+        const reactionWords = [
+            "beautiful", "moving", "profound", "touching", "inspiring", 
+            "wonderful", "heartfelt", "powerful", "emotional", "perfect",
+            "amazing", "deep", "meaningful", "brilliant", "lovely"
         ];
 
-        let animationActive = false;
-        let wordInterval;
-        let poemInterval;
+        let readingActive = false;
+        let currentLineIndex = 0;
+        let reactionInterval;
+        let readingTimeout;
+        let speechSynthesis = window.speechSynthesis;
+        let currentUtterance = null;
+        let audioContext = null;
+        let voicesLoaded = false;
+        let audioInitialized = false;
 
-        function createFloatingWord() {
-            if (!animationActive) return;
-            
-            const word = floatingWords[Math.floor(Math.random() * floatingWords.length)];
-            const wordElement = document.createElement('div');
-            wordElement.className = 'floating-word word-animation';
-            wordElement.textContent = word;
-            
-            // Random position around the poet
-            const leftPos = 25 + Math.random() * 50;
-            const bottomPos = 20 + Math.random() * 30;
-            
-            wordElement.style.left = leftPos + '%';
-            wordElement.style.bottom = bottomPos + '%';
-            
-            document.querySelector('.room').appendChild(wordElement);
-            
-            // Remove after animation
-            setTimeout(() => {
-                if (wordElement.parentNode) {
-                    wordElement.parentNode.removeChild(wordElement);
+        // Audio initialization
+        function initializeAudio() {
+            return new Promise((resolve) => {
+                // Check for Speech Synthesis API support
+                if (typeof window.speechSynthesis === 'undefined' || typeof window.SpeechSynthesisUtterance === 'undefined') {
+                    console.warn('Speech Synthesis API not supported');
+                    updateAudioStatus('Speech not supported on this device');
+                    resolve(false);
+                    return;
                 }
-            }, 8000);
+                
+                // Initialize Speech Synthesis
+                if (speechSynthesis) {
+                    try {
+                        // Force load voices
+                        speechSynthesis.getVoices();
+                        
+                        // Wait for voices to load
+                        const checkVoices = () => {
+                            const voices = speechSynthesis.getVoices();
+                            if (voices.length > 0) {
+                                voicesLoaded = true;
+                                console.log('Voices loaded:', voices.length);
+                                updateAudioStatus('Speech ready');
+                                resolve(true);
+                            } else {
+                                setTimeout(checkVoices, 100);
+                            }
+                        };
+                        
+                        speechSynthesis.onvoiceschanged = checkVoices;
+                        checkVoices();
+                        
+                        // Fallback timeout
+                        setTimeout(() => {
+                            if (!voicesLoaded) {
+                                console.warn('Voices loading timeout, proceeding anyway');
+                                voicesLoaded = true;
+                                updateAudioStatus('Speech ready (limited)');
+                                resolve(true);
+                            }
+                        }, 3000);
+                        
+                    } catch (e) {
+                        console.error('Speech synthesis initialization error:', e);
+                        updateAudioStatus('Speech setup failed');
+                        resolve(false);
+                    }
+                } else {
+                    updateAudioStatus('Speech not supported');
+                    resolve(false);
+                }
+                
+                // Initialize Web Audio API
+                try {
+                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    if (audioContext.state === 'suspended') {
+                        audioContext.resume();
+                    }
+                } catch (e) {
+                    console.warn('Web Audio API not supported');
+                }
+            });
         }
 
-        function displayPoemLine(lineIndex) {
-            if (lineIndex >= samplePoem.length) {
-                // Restart after all lines shown
+        function updateAudioStatus(message) {
+            const statusEl = document.getElementById('audioStatus');
+            statusEl.textContent = message;
+            if (message.includes('ready')) {
+                statusEl.classList.add('audio-ready');
+            }
+        }
+
+        function createApplauseSound() {
+            if (!audioContext) return;
+
+            try {
+                // Resume context if suspended
+                if (audioContext.state === 'suspended') {
+                    audioContext.resume();
+                }
+
+                // Create multiple short bursts to simulate clapping
+                for (let i = 0; i < 25; i++) {
+                    setTimeout(() => {
+                        const oscillator = audioContext.createOscillator();
+                        const gainNode = audioContext.createGain();
+                        const filterNode = audioContext.createBiquadFilter();
+                        
+                        oscillator.connect(filterNode);
+                        filterNode.connect(gainNode);
+                        gainNode.connect(audioContext.destination);
+                        
+                        oscillator.frequency.value = 150 + Math.random() * 400;
+                        oscillator.type = 'sawtooth';
+                        
+                        filterNode.type = 'lowpass';
+                        filterNode.frequency.value = 800 + Math.random() * 400;
+                        
+                        gainNode.gain.setValueAtTime(0.05, audioContext.currentTime);
+                        gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.15);
+                        
+                        oscillator.start(audioContext.currentTime);
+                        oscillator.stop(audioContext.currentTime + 0.15);
+                    }, i * 40 + Math.random() * 80);
+                }
+            } catch (e) {
+                console.warn('Applause sound failed:', e);
+            }
+        }
+
+        function speakText(text, callback) {
+            if (!speechSynthesis || !voicesLoaded || typeof window.SpeechSynthesisUtterance === 'undefined') {
+                console.warn('Speech synthesis not available, using visual-only mode');
+                updateAudioStatus('Visual mode only');
+                // Simulate speech timing
+                if (callback) setTimeout(callback, text.length * 80 + 1000);
+                return;
+            }
+
+            try {
+                // Stop any current speech
+                speechSynthesis.cancel();
+                
+                // Small delay to ensure cancellation
                 setTimeout(() => {
-                    if (animationActive) {
-                        clearPoemLines();
-                        setTimeout(() => displayPoemLine(0), 2000);
+                    try {
+                        currentUtterance = new SpeechSynthesisUtterance(text);
+                        
+                        // Configure voice settings for poetry
+                        currentUtterance.rate = 0.7;
+                        currentUtterance.pitch = 1.1;
+                        currentUtterance.volume = 1.0;
+                        
+                        // Find the best available voice
+                        const voices = speechSynthesis.getVoices();
+                        console.log('Available voices:', voices.map(v => `${v.name} (${v.lang})`));
+                        
+                        // Prefer female or natural sounding voices
+                        const preferredVoice = voices.find(voice => 
+                            voice.lang.startsWith('en') && 
+                            (voice.name.toLowerCase().includes('female') || 
+                             voice.name.toLowerCase().includes('natural') || 
+                             voice.name.toLowerCase().includes('premium') ||
+                             voice.name.toLowerCase().includes('enhanced'))
+                        ) || voices.find(voice => voice.lang.startsWith('en') && voice.localService) 
+                          || voices.find(voice => voice.lang.startsWith('en'));
+                        
+                        if (preferredVoice) {
+                            currentUtterance.voice = preferredVoice;
+                            console.log('Using voice:', preferredVoice.name);
+                        }
+                        
+                        let hasEnded = false;
+                        const handleEnd = () => {
+                            if (!hasEnded) {
+                                hasEnded = true;
+                                document.getElementById('poet').classList.remove('speaking');
+                                if (callback) callback();
+                            }
+                        };
+                        
+                        currentUtterance.onend = handleEnd;
+                        currentUtterance.onerror = (e) => {
+                            console.warn('Speech error:', e);
+                            handleEnd();
+                        };
+                        
+                        currentUtterance.onstart = () => {
+                            document.getElementById('poet').classList.add('speaking');
+                            console.log('Started speaking:', text);
+                        };
+                        
+                        speechSynthesis.speak(currentUtterance);
+                        
+                        // Fallback timeout in case events don't fire
+                        setTimeout(() => {
+                            if (!hasEnded) {
+                                console.warn('Speech timeout, forcing end');
+                                handleEnd();
+                            }
+                        }, text.length * 100 + 3000);
+                        
+                    } catch (innerError) {
+                        console.error('Inner speech synthesis error:', innerError);
+                        updateAudioStatus('Speech failed, visual mode');
+                        if (callback) setTimeout(callback, text.length * 80 + 1000);
                     }
-                }, 3000);
+                }, 100);
+                
+            } catch (e) {
+                console.error('Speech synthesis error:', e);
+                updateAudioStatus('Speech failed, visual mode');
+                if (callback) setTimeout(callback, text.length * 80 + 1000);
+            }
+        }
+
+        function createReactionWord() {
+            if (!readingActive) return;
+            
+            const word = reactionWords[Math.floor(Math.random() * reactionWords.length)];
+            const reactionElement = document.createElement('div');
+            reactionElement.className = 'reaction-word reaction-animation';
+            reactionElement.textContent = word;
+            
+            // Random position near audience members
+            const side = Math.random() < 0.5 ? 'left' : 'right';
+            const leftPos = side === 'left' ? 5 + Math.random() * 25 : 70 + Math.random() * 25;
+            const bottomPos = 8 + Math.random() * 10;
+            
+            reactionElement.style.left = leftPos + '%';
+            reactionElement.style.bottom = bottomPos + '%';
+            
+            document.querySelector('.room').appendChild(reactionElement);
+            
+            setTimeout(() => {
+                if (reactionElement.parentNode) {
+                    reactionElement.parentNode.removeChild(reactionElement);
+                }
+            }, 4000);
+        }
+
+        function speakLine(lineIndex) {
+            if (lineIndex >= samplePoem.length || !readingActive) {
+                // End of poem
+                setTimeout(() => {
+                    if (readingActive) {
+                        createApplauseSound();
+                        triggerApplause();
+                        setTimeout(() => {
+                            clearPoemLines();
+                            currentLineIndex = 0;
+                            setTimeout(() => speakLine(0), 3000);
+                        }, 3000);
+                    }
+                }, 1000);
                 return;
             }
             
             const lineElement = document.createElement('div');
             lineElement.className = 'poem-line';
             lineElement.textContent = samplePoem[lineIndex];
-            lineElement.style.animation = fadeIn 2s ease-in-out forwards;
-            lineElement.style.animationDelay = '0.5s';
+            lineElement.style.animation = `fadeIn 1s ease-in-out forwards`;
             
             document.getElementById('poemLines').appendChild(lineElement);
             
-            // Next line after delay
+            // Highlight current line as being spoken
             setTimeout(() => {
-                if (animationActive) {
-                    displayPoemLine(lineIndex + 1);
-                }
-            }, 3000);
+                lineElement.classList.add('speaking-line');
+                
+                // Speak the line aloud
+                speakText(samplePoem[lineIndex], () => {
+                    // Remove highlight after speaking
+                    setTimeout(() => {
+                        if (lineElement) {
+                            lineElement.classList.remove('speaking-line');
+                        }
+                        
+                        // Trigger audience reactions occasionally
+                        if (Math.random() < 0.4) {
+                            createReactionWord();
+                        }
+                        
+                        // Next line after a pause
+                        readingTimeout = setTimeout(() => {
+                            if (readingActive) {
+                                speakLine(lineIndex + 1);
+                            }
+                        }, 1500);
+                    }, 500);
+                });
+                
+            }, 500);
         }
 
         function clearPoemLines() {
             document.getElementById('poemLines').innerHTML = '';
         }
 
-        function startPoetryAnimation() {
-            animationActive = true;
-            document.querySelector('.play-btn').textContent = 'Stop Poetry';
-            document.querySelector('.play-btn').onclick = stopPoetryAnimation;
+        function startReading() {
+            readingActive = true;
+            document.getElementById('playBtn').textContent = 'Stop Reading';
+            document.getElementById('playBtn').classList.add('active');
             
-            // Start floating words
-            wordInterval = setInterval(createFloatingWord, 2000);
+            // Start audience reactions
+            reactionInterval = setInterval(createReactionWord, 3000);
             
-            // Start poem display
-            setTimeout(() => displayPoemLine(0), 1000);
+            // Start poem reading
+            setTimeout(() => speakLine(0), 1000);
         }
 
-        function stopPoetryAnimation() {
-            animationActive = false;
-            clearInterval(wordInterval);
-            clearInterval(poemInterval);
+        function stopReading() {
+            readingActive = false;
+            clearTimeout(readingTimeout);
+            clearInterval(reactionInterval);
             
-            // Clear floating words
-            document.querySelectorAll('.floating-word').forEach(word => {
+            // Stop any current speech
+            if (speechSynthesis) {
+                try {
+                    speechSynthesis.cancel();
+                } catch (e) {
+                    console.warn('Error stopping speech:', e);
+                }
+            }
+            
+            // Remove poet speaking animation
+            document.getElementById('poet').classList.remove('speaking');
+            
+            // Clear reactions
+            document.querySelectorAll('.reaction-word').forEach(word => {
                 word.remove();
             });
             
             clearPoemLines();
+            currentLineIndex = 0;
             
-            document.querySelector('.play-btn').textContent = 'Begin Poetry';
-            document.querySelector('.play-btn').onclick = startPoetryAnimation;
+            document.getElementById('playBtn').textContent = 'Begin Reading';
+            document.getElementById('playBtn').classList.remove('active');
         }
 
-        // Auto-start after page load
-        setTimeout(() => {
-            startPoetryAnimation();
-        }, 2000);
+        function triggerApplause() {
+            // Play applause sound
+            createApplauseSound();
+            
+            // Create applause particles from audience
+            const audienceMembers = document.querySelectorAll('.audience-member');
+            
+            audienceMembers.forEach((member, index) => {
+                setTimeout(() => {
+                    const rect = member.getBoundingClientRect();
+                    const roomRect = document.querySelector('.room').getBoundingClientRect();
+                    
+                    for (let i = 0; i < 8; i++) {
+                        setTimeout(() => {
+                            const particle = document.createElement('div');
+                            particle.className = 'applause-particle';
+                            particle.style.left = ((rect.left - roomRect.left + Math.random() * 20) / roomRect.width * 100) + '%';
+                            particle.style.bottom = ((roomRect.bottom - rect.top + Math.random() * 20) / roomRect.height * 100) + '%';
+                            
+                            document.querySelector('.room').appendChild(particle);
+                            
+                            setTimeout(() => {
+                                if (particle.parentNode) {
+                                    particle.parentNode.removeChild(particle);
+                                }
+                            }, 2000);
+                        }, i * 100);
+                    }
+                }, index * 50);
+            });
+            
+            // Enhanced audience movement during applause
+            audienceMembers.forEach(member => {
+                member.style.animation = 'subtleMovement 0.5s ease-in-out 6';
+                setTimeout(() => {
+                    member.style.animation = 'subtleMovement 6s ease-in-out infinite';
+                }, 3000);
+            });
+        }
+
+        // Event listeners
+        document.getElementById('initAudioBtn').addEventListener('click', async function() {
+            updateAudioStatus('Initializing audio...');
+            
+            try {
+                // User interaction is required for audio
+                if (audioContext && audioContext.state === 'suspended') {
+                    await audioContext.resume();
+                }
+                
+                const success = await initializeAudio();
+                audioInitialized = true;
+                
+                this.style.display = 'none';
+                document.getElementById('playBtn').disabled = false;
+                
+                if (success) {
+                    updateAudioStatus('Audio ready!');
+                    
+                    // Test speech if available
+                    if (typeof window.SpeechSynthesisUtterance !== 'undefined') {
+                        try {
+                            const testUtterance = new SpeechSynthesisUtterance('Audio is now ready');
+                            testUtterance.volume = 0.5;
+                            testUtterance.rate = 1;
+                            speechSynthesis.speak(testUtterance);
+                        } catch (e) {
+                            console.warn('Test speech failed:', e);
+                        }
+                    }
+                } else {
+                    updateAudioStatus('Visual mode ready!');
+                }
+                
+            } catch (error) {
+                console.error('Audio initialization failed:', error);
+                updateAudioStatus('Using visual mode');
+                audioInitialized = true; // Allow visual-only mode
+                this.style.display = 'none';
+                document.getElementById('playBtn').disabled = false;
+            }
+        });
+
+        document.getElementById('playBtn').addEventListener('click', function() {
+            if (readingActive) {
+                stopReading();
+            } else {
+                startReading();
+            }
+        });
+
+        document.getElementById('applauseBtn').addEventListener('click', function() {
+            triggerApplause();
+        });
+
+        // Initialize on page load
+        window.addEventListener('load', () => {
+            console.log('Page loaded, preparing audio system...');
+            
+            // Check for Speech Synthesis API support immediately
+            if (typeof window.speechSynthesis === 'undefined' || typeof window.SpeechSynthesisUtterance === 'undefined') {
+                updateAudioStatus('Click "Enable Visual Mode" to start');
+                document.getElementById('initAudioBtn').textContent = 'Enable Visual Mode';
+            } else {
+                updateAudioStatus('Click "Enable Audio" to start');
+            }
+        });
+
+        // Handle page visibility change
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden && readingActive) {
+                // Pause when tab is hidden
+                if (speechSynthesis) {
+                    speechSynthesis.pause();
+                }
+            } else if (!document.hidden && readingActive) {
+                // Resume when tab is visible
+                if (speechSynthesis) {
+                    speechSynthesis.resume();
+                }
+            }
+        });
     </script>
 </body>
 </html>
