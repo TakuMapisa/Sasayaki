@@ -412,11 +412,9 @@
         ];
 
         const reactionWords = [
-            "haunting", "profound", "moving", "breathtaking", "soul-stirring", 
-            "mesmerizing", "evocative", "touching", "poignant", "ethereal",
-            "captivating", "intimate", "powerful", "haunting", "transcendent",
-            "beautiful", "stirring", "emotional", "deep", "reflective",
-            "contemplative", "whispered", "gentle", "tender", "raw"
+            "beautiful", "moving", "profound", "touching", "inspiring", 
+            "wonderful", "heartfelt", "powerful", "emotional", "perfect",
+            "amazing", "deep", "meaningful", "brilliant", "lovely"
         ];
 
         let readingActive = false;
@@ -502,54 +500,6 @@
             }
         }
 
-        function addEmotionalExpression(text) {
-            // Add SSML-like pauses and emphasis for more emotional delivery
-            let emotionalText = text;
-            
-            // Add pauses after commas and periods for dramatic effect
-            emotionalText = emotionalText.replace(/,/g, ', ');
-            emotionalText = emotionalText.replace(/\./g, '... ');
-            emotionalText = emotionalText.replace(/\?/g, '? ');
-            emotionalText = emotionalText.replace(/!/g, '! ');
-            
-            // Add emphasis to emotional words
-            const emotionalWords = ['whisper', 'moment', 'existence', 'blur', 'everything', 'stops', 'remembered', 'cross'];
-            emotionalWords.forEach(word => {
-                const regex = new RegExp(`\\b${word}\\b`, 'gi');
-                emotionalText = emotionalText.replace(regex, ` ${word} `);
-            });
-            
-            // Add breathing pauses at the beginning and end
-            emotionalText = ' ' + emotionalText + ' ';
-            
-            return emotionalText;
-        }
-
-        function getEmotionalPitch(text) {
-            // Vary pitch based on emotional content
-            const melancholyWords = ['whisper', 'blur', 'stops', 'remembered', 'existence'];
-            const dramaticWords = ['moment', 'everything', 'whole', 'turns'];
-            
-            let pitch = 1.0; // Base pitch
-            
-            // Lower pitch for melancholy/contemplative lines
-            if (melancholyWords.some(word => text.toLowerCase().includes(word))) {
-                pitch = 0.8;
-            }
-            
-            // Slightly higher pitch for dramatic emphasis
-            if (dramaticWords.some(word => text.toLowerCase().includes(word))) {
-                pitch = 1.2;
-            }
-            
-            // Final line gets the lowest, most intimate pitch
-            if (text.toLowerCase().includes('whisper')) {
-                pitch = 0.7;
-            }
-            
-            return pitch;
-        }
-
         function createApplauseSound() {
             if (!audioContext) return;
 
@@ -604,30 +554,24 @@
                 // Small delay to ensure cancellation
                 setTimeout(() => {
                     try {
-                        // Add emotional pauses and emphasis to the text
-                        const emotionalText = addEmotionalExpression(text);
-                        currentUtterance = new SpeechSynthesisUtterance(emotionalText);
+                        currentUtterance = new SpeechSynthesisUtterance(text);
                         
-                        // Configure voice settings for emotional poetry reading
-                        currentUtterance.rate = 0.6; // Slower for more dramatic effect
-                        currentUtterance.pitch = getEmotionalPitch(text); // Dynamic pitch based on content
+                        // Configure voice settings for poetry
+                        currentUtterance.rate = 0.7;
+                        currentUtterance.pitch = 1.1;
                         currentUtterance.volume = 1.0;
                         
                         // Find the best available voice
                         const voices = speechSynthesis.getVoices();
                         console.log('Available voices:', voices.map(v => `${v.name} (${v.lang})`));
                         
-                        // Prefer expressive, natural voices for poetry
+                        // Prefer female or natural sounding voices
                         const preferredVoice = voices.find(voice => 
                             voice.lang.startsWith('en') && 
-                            (voice.name.toLowerCase().includes('neural') ||
+                            (voice.name.toLowerCase().includes('female') || 
                              voice.name.toLowerCase().includes('natural') || 
                              voice.name.toLowerCase().includes('premium') ||
-                             voice.name.toLowerCase().includes('enhanced') ||
-                             voice.name.toLowerCase().includes('expressive') ||
-                             voice.name.toLowerCase().includes('samantha') ||
-                             voice.name.toLowerCase().includes('alex') ||
-                             voice.name.toLowerCase().includes('aria'))
+                             voice.name.toLowerCase().includes('enhanced'))
                         ) || voices.find(voice => voice.lang.startsWith('en') && voice.localService) 
                           || voices.find(voice => voice.lang.startsWith('en'));
                         
@@ -707,7 +651,7 @@
 
         function speakLine(lineIndex) {
             if (lineIndex >= samplePoem.length || !readingActive) {
-                // End of poem - longer pause for emotional impact
+                // End of poem
                 setTimeout(() => {
                     if (readingActive) {
                         createApplauseSound();
@@ -715,76 +659,47 @@
                         setTimeout(() => {
                             clearPoemLines();
                             currentLineIndex = 0;
-                            // Longer pause before restarting
-                            setTimeout(() => speakLine(0), 5000);
-                        }, 4000);
+                            setTimeout(() => speakLine(0), 3000);
+                        }, 3000);
                     }
-                }, 2000);
+                }, 1000);
                 return;
             }
             
             const lineElement = document.createElement('div');
             lineElement.className = 'poem-line';
             lineElement.textContent = samplePoem[lineIndex];
-            lineElement.style.animation = `fadeIn 1.5s ease-in-out forwards`;
+            lineElement.style.animation = `fadeIn 1s ease-in-out forwards`;
             
             document.getElementById('poemLines').appendChild(lineElement);
             
-            // Longer pause before highlighting and speaking each line
+            // Highlight current line as being spoken
             setTimeout(() => {
                 lineElement.classList.add('speaking-line');
                 
-                // Speak the line aloud with emotional delivery
+                // Speak the line aloud
                 speakText(samplePoem[lineIndex], () => {
-                    // Remove highlight after speaking with fade effect
+                    // Remove highlight after speaking
                     setTimeout(() => {
                         if (lineElement) {
                             lineElement.classList.remove('speaking-line');
                         }
                         
-                        // Trigger audience reactions more frequently for emotional impact
-                        if (Math.random() < 0.6) {
-                            setTimeout(() => createReactionWord(), Math.random() * 1000);
+                        // Trigger audience reactions occasionally
+                        if (Math.random() < 0.4) {
+                            createReactionWord();
                         }
                         
-                        // Vary pause between lines based on content for natural rhythm
-                        const pauseDuration = getLinePauseDuration(samplePoem[lineIndex], lineIndex);
-                        
+                        // Next line after a pause
                         readingTimeout = setTimeout(() => {
                             if (readingActive) {
                                 speakLine(lineIndex + 1);
                             }
-                        }, pauseDuration);
-                    }, 800);
+                        }, 1500);
+                    }, 500);
                 });
                 
-            }, 800);
-        }
-
-        function getLinePauseDuration(lineText, lineIndex) {
-            // Vary pause duration based on line content and position
-            let basePause = 2000; // Base pause between lines
-            
-            // Longer pauses after lines ending with punctuation
-            if (lineText.endsWith(',')) {
-                basePause += 500;
-            } else if (lineText.endsWith('.')) {
-                basePause += 1000;
-            } else if (lineText.endsWith('...')) {
-                basePause += 1500;
-            }
-            
-            // Longer pause before the final line for dramatic effect
-            if (lineIndex === samplePoem.length - 2) {
-                basePause += 2000;
-            }
-            
-            // Slightly shorter pauses for flow in the middle
-            if (lineIndex > 0 && lineIndex < samplePoem.length - 2) {
-                basePause -= 300;
-            }
-            
-            return basePause;
+            }, 500);
         }
 
         function clearPoemLines() {
@@ -849,4 +764,111 @@
                             const particle = document.createElement('div');
                             particle.className = 'applause-particle';
                             particle.style.left = ((rect.left - roomRect.left + Math.random() * 20) / roomRect.width * 100) + '%';
-                            particle.style.bottom = ((roomRect.bottom - rect.top
+                            particle.style.bottom = ((roomRect.bottom - rect.top + Math.random() * 20) / roomRect.height * 100) + '%';
+                            
+                            document.querySelector('.room').appendChild(particle);
+                            
+                            setTimeout(() => {
+                                if (particle.parentNode) {
+                                    particle.parentNode.removeChild(particle);
+                                }
+                            }, 2000);
+                        }, i * 100);
+                    }
+                }, index * 50);
+            });
+            
+            // Enhanced audience movement during applause
+            audienceMembers.forEach(member => {
+                member.style.animation = 'subtleMovement 0.5s ease-in-out 6';
+                setTimeout(() => {
+                    member.style.animation = 'subtleMovement 6s ease-in-out infinite';
+                }, 3000);
+            });
+        }
+
+        // Event listeners
+        document.getElementById('initAudioBtn').addEventListener('click', async function() {
+            updateAudioStatus('Initializing audio...');
+            
+            try {
+                // User interaction is required for audio
+                if (audioContext && audioContext.state === 'suspended') {
+                    await audioContext.resume();
+                }
+                
+                const success = await initializeAudio();
+                audioInitialized = true;
+                
+                this.style.display = 'none';
+                document.getElementById('playBtn').disabled = false;
+                
+                if (success) {
+                    updateAudioStatus('Audio ready!');
+                    
+                    // Test speech if available
+                    if (typeof window.SpeechSynthesisUtterance !== 'undefined') {
+                        try {
+                            const testUtterance = new SpeechSynthesisUtterance('Audio is now ready');
+                            testUtterance.volume = 0.5;
+                            testUtterance.rate = 1;
+                            speechSynthesis.speak(testUtterance);
+                        } catch (e) {
+                            console.warn('Test speech failed:', e);
+                        }
+                    }
+                } else {
+                    updateAudioStatus('Visual mode ready!');
+                }
+                
+            } catch (error) {
+                console.error('Audio initialization failed:', error);
+                updateAudioStatus('Using visual mode');
+                audioInitialized = true; // Allow visual-only mode
+                this.style.display = 'none';
+                document.getElementById('playBtn').disabled = false;
+            }
+        });
+
+        document.getElementById('playBtn').addEventListener('click', function() {
+            if (readingActive) {
+                stopReading();
+            } else {
+                startReading();
+            }
+        });
+
+        document.getElementById('applauseBtn').addEventListener('click', function() {
+            triggerApplause();
+        });
+
+        // Initialize on page load
+        window.addEventListener('load', () => {
+            console.log('Page loaded, preparing audio system...');
+            
+            // Check for Speech Synthesis API support immediately
+            if (typeof window.speechSynthesis === 'undefined' || typeof window.SpeechSynthesisUtterance === 'undefined') {
+                updateAudioStatus('Click "Enable Visual Mode" to start');
+                document.getElementById('initAudioBtn').textContent = 'Enable Visual Mode';
+            } else {
+                updateAudioStatus('Click "Enable Audio" to start');
+            }
+        });
+
+        // Handle page visibility change
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden && readingActive) {
+                // Pause when tab is hidden
+                if (speechSynthesis) {
+                    speechSynthesis.pause();
+                }
+            } else if (!document.hidden && readingActive) {
+                // Resume when tab is visible
+                if (speechSynthesis) {
+                    speechSynthesis.resume();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
